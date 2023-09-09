@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set "folderPath=C:\c+++\Template\graph"
+set "folderPath=C:\c+++\Templatek\okokok"
 
 for %%f in ("%folderPath%\*.cpp") do (
     echo Converting file: %%~nxf
