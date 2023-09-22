@@ -8,78 +8,93 @@ const ll N = 1e5 + 10;
 #include<cstring>
 #include<unordered_map>
 #include<algorithm>
-template<typename T>
-void out(T *a)
+
+
+ll n, m;
+ll f[N], V[N], W[N], C[N];
+ll q[N];
+//
+
+void slove1()//朴素
 {
-	for (int i = 0; i <= 10; i++)
-	{
-		cout << a[i] << ' ';
-	}
-}
-struct node
-{
-	ll v, w, m; //花费,价值,个数
-}
-a[N];
-ll dp[N] = {0};
-ll q[N] = {0};
-ll n, W;
-ll calc(int i, int d, int k)
-{
-	return dp[d+k*a[i].v]-k*a[i].w;
-}
-void slove1()//二进制优化
-{
-	memset(dp,0xcf,sizeof dp);
-	dp[0]=0;
 	for (int i = 1; i <= n; i++)
 	{
-		cin >> a[i].w >> a[i]. v >> a[i].m;
-		//枚举余数,更新j%v==d的dp[j]
-		for (int d = 0; d < a[i].m; d++)
+		for (int j = m; j >= 0; j--)
+		{
+			for (int k = 0; k <= min(C[i], j / V[i]); k++)
+				f[j] = max(f[j], f[j - k * V[i]] + k * W[i]);
+		}
+	}
+	cout << f[m];
+}
+
+ll calc(int i, int u, int x)//x含义是p-k的值
+{
+	return f[u + x * V[i]] - x * W[i];
+}
+//q维护了f[u+(p-C[i])*V[i]]~f[u+(p-1)*V[i]]这个窗口
+void slove2()//单调队列优化
+{
+	memset(f, 0xcf, sizeof (f));
+	f[0] = 0;
+	for (int i = 1; i <= n; i++)
+	{
+		//j=u+p*V[i]
+		for (int u = 0; u < V[i]; u++)
 		{
 			ll l = 1, r = 0;
-			ll maxp = (W - d) / a[i].v;
-			//倒序更新
-			//初始化滑动窗口
-			for (int k = maxp - 1; k >= max((ll)0, maxp - a[i].m); --k)
+			ll maxp = (m - u) / V[i];
+			for (int p = maxp - 1; p >= max((ll)0, maxp - C[i]); p--)
 			{
-				//窗口内只保留最大的g[d+k*v[i]]
-				while (l <= r && calc(i, d, q[r]) <= calc(i, d, k))
+				//右侧插入维护单调性
+				while (l <= r && calc(i, u, q[r]) <= calc(i, u, p))
 					r--;
-				q[++r] = k;//队列存储决策选k个i物品
+				q[++r] = p;
 			}
-			//往0滑动
-			for (int k = maxp; k >= 0; --k)
+			//每次更新f[u+p*V[i]]的值
+			//候选集合为max(f[u+(p-k)*V[i]]-(p-k)*W[i])+p*W[i]
+			//k的范围[0,C[i]]
+			//k使用单调队列存储
+			for (int p = maxp; p >= 0 ; p--)
 			{
-				//排除过时的决策
-				while (l <= r && q[l] > k - 1) l++;
-
-				//更新状态
-				if (l <= r)
-					dp[d + k * a[i].v] = max(dp[d + k * a[i].v], calc(i, d, q[l]) + k * a[i].w);
-
-				//添加决策k
-				while (l <= r && calc(i, d, q[r]) <= calc(i, d, k - a[i].m - 1)) r--;
-				q[++r] = k - a[i].m - 1;
+				//除去>=j的决策
+				//窗口右边界往左移
+				while (l <= r && q[l] > p - 1)
+					l++;
+				//使用
+				if (l <= r)//队列有值
+					f[u + p * V[i]] = max(f[u + p * V[i]],
+					                      calc(i, u, q[l]) + p * W[i]);
+				//当前V[i]的系数是p-C[i]-1
+				//添加,旧决策<=新决策,旧决策舍去
+				if (p - C[i] - 1 >= 0)
+				{
+					//窗口左边界往左移
+					//从r处添加维护单调性
+					while (l <= r &&
+					       calc(i, u, q[r]) <= calc(i, u, p - C[i] - 1) )
+						r--;
+					q[++r] = p - C[i] - 1;
+				}
 			}
 		}
 	}
 	ll ans = 0;
-	for (int i = 1; i <= W; i++)
+	for (int i = 1; i <= m; i++)
 	{
-		ans = max(ans, dp[i]);
+		ans = max(ans, f[i]);
 	}
 	cout << ans;
-	return ;
 }
-
 int main()
 {
-	freopen("C:\\Users\\30886\\Desktop\\in.txt", "r", stdin);
+//	freopen("C:\\Users\\30886\\Desktop\\in.txt", "r", stdin);
 	ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-	cin >> n >> W;
-	slove1();
+	cin >> n >> m;
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> W[i] >> V[i] >> C[i];
+	}
+	slove2();
 	return 0;
 }
-
