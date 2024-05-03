@@ -19,12 +19,12 @@ ll prim()//返回最小生成树的边权和
 	for(int i=0;i<=n;i++)
 	{
 		int t=-1;
-		for(int j=1;j<=n;j++)//选取一个离连通部分最近的节点
+		for(int j=1;j<=n;j++)//选取一个离连通部分最近的节点t
 		{
 			if(!st[j]&&(t==-1||dist[t]>dist[j]))
 				t=j;
 		}
-		if(i&&dist[t]==INF) //无法连通
+		if(i&&dist[t]==INF) //找不到可以联通的节点
 			return INF;
 		if(i)//i>0时 
 			res+=dist[t];
@@ -39,10 +39,10 @@ ll prim()//返回最小生成树的边权和
 int main()
 { 
 	freopen("C:\\Users\\30886\\Desktop\\in.txt", "r", stdin);
-	memset(g,INF,sizeof g);
 	ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	cin>>n>>m;
 	ll a,b,c;
+	memset(g,INF,sizeof g);
 	for(int i=1;i<=m;i++){
 		cin>>a>>b>>c;
 		g[a][b]=g[b][a]=min(g[a][b],c);
