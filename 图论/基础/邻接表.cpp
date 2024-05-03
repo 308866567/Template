@@ -9,7 +9,16 @@ const long long N = 1e6 + 1;
 //h需要初始化为-1
 ll h[N], w[N], e[N], ne[N], idx;
 void add(ll a, ll b, ll c) {
-	e[idx] = b, w[idx] = c, ne[idx] = h[a];
+	//另一种写法
+	// e[++idx]=b;
+	// w[idx]=c;
+	// ne[idx]=h[a];
+	// h[a]=idx;
+
+
+	e[idx] = b;
+	w[idx] = c;
+	ne[idx] = h[a];
 	h[a] = idx++;
 	/*
 	memset(h, -1, sizeof (h));
