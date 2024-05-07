@@ -11,6 +11,13 @@ struct edge
 ll n, m, s = 1; // 节点数,边数,起点
 ll dist[N];
 ll backup[N];
+/*
+给定一个 n 个点 m条边的有向图，
+图中可能存在重边和自环， 边权可能为负数。
+请你求出从 1号点到 n 号点的最多经过 k 条边的最短距离，
+如果无法从 1 号点走到 n号点，输出 impossible。
+注意：图中可能 存在负权回路 。
+*/
 void bellman()
 {
 	memset(dist, 0x3f, sizeof dist);
