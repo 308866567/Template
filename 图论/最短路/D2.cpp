@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include<queue>
 typedef long long ll;
-const ll N = 2e5;
+const ll N = 1e6;
 using namespace std;
 unordered_map<int, unordered_map<int, int>>g;//邻接表
 ll dist[N];
@@ -56,8 +56,9 @@ ll dijkstra()
 }
 int main()
 {
-	//	freopen("C:\\Users\\30886\\Desktop\\in.txt", "r", stdin);
-	ios::sync_with_stdio(0);
+#ifdef LOCAL
+	freopen("/home/xiaobingdu/code/c++/in.txt", "r", stdin);
+#endif	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 	cin >> n >> m;
