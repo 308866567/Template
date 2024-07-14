@@ -8,7 +8,6 @@ const ll N = 1e6 + 10;
 #define INF 0x3f3f3f3f
 const ll mod = 1e9 + 7;
 ll n;
-
 class segmentTree
 {
     const static ll N = 1e6 + 10;
@@ -25,6 +24,14 @@ class segmentTree
     }
     inline void push_down(ll p)
     {
+        if (tr[p].add > 0)
+        {
+            tr[lc(p)].add = tr[p].add;
+            tr[lc(p)].sum += tr[p].add * (tr[lc(p)].r - tr[lc(p)].l + 1);
+            tr[rc(p)].add = tr[p].add;
+            tr[rc(p)].sum = tr[p].add * (tr[rc(p)].r - tr[rc(p)].l + 1);
+            tr[p].add = 0;
+        }
     }
     ll *w; // w为区间单点值数组
     void build(ll p, ll l, ll r)
@@ -37,17 +44,37 @@ class segmentTree
         build(rc(p), m + 1, r);
         push_up(p);
     }
-    //区间
-    void update(ll p,ll x,ll y,ll k){
-
+    // 区间[x,y]
+    void update(ll p, ll x, ll y, ll k)
+    {
+        if (tr[p].l >= x && tr[p].r <= y)
+        {
+            tr[p].sum += k * (tr[p].r - tr[p].l + 1);
+            tr[p].add += k;
+            return;
+        }
+        ll m = tr[p].l + tr[p].r >> 1;
+        push_down(p);
+        if (x <= m)
+            update(lc(p), x, y, k);
+        if (y > m)
+            update(rc(p), x, y, k);
+        push_up(p);
     }
-    //单点
-    void update(ll p,ll x,ll k){
-
-    }
-    //查询
-    ll query(ll p,ll x,ll y){
-
+    // 查询[x,y]
+    ll query(ll p, ll x, ll y)
+    {
+        if (tr[p].l >= x && tr[p].r <= y)
+        {
+            return tr[p].sum;
+        }
+        ll m = tr[p].l + tr[p].r >> 1;
+        push_down(p);
+        ll sum = 0;
+        if (x <= m)
+            sum += query(lc(p), x, y);
+        if (y > m)
+            sum += query(rc(p), x, y);
     }
 };
 
