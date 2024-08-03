@@ -5,6 +5,7 @@ const ll N = 1e6 + 10;
 #define rep(i, start, end) for (ll i = start; i <= end; i++)
 #define rrep(i, start, end) for (ll i = start; i >= end; i--)
 #define inf 0x3f3f3f3f
+//有向无环图称为DAG
 ll n, m;
 ll d[N]; // 存储节点的入度
 ll h[N], e[N], ne[N], w[N], idx = 0;

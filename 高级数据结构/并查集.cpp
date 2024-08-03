@@ -1,6 +1,7 @@
 #include <iostream>
 #include <bits/stdc++.h>
 using namespace std;
+//return父亲=爷爷
 class uf
 {
 public:

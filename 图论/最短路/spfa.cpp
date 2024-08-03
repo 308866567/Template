@@ -27,7 +27,7 @@ void add(ll a, ll b, ll c)
 }
 ll n, m;
 queue<ll> q;
-bool v[N];//标记当前节点是否在队列里
+bool v[N]; // 标记当前节点是否在队列里
 ll dist[N];
 void spfa()
 {
@@ -49,10 +49,38 @@ void spfa()
 			if (dist[y] > dist[x] + z)
 			{
 				dist[y] = dist[x] + z;
-				//当前已经加入队列的结点，
-				// 无需再次加入队列，
-				// 即便发生了更新也只用更新数值即可，
-				// 重复添加降低效率
+				// 当前已经加入队列的结点，
+				//  无需再次加入队列，
+				//  即便发生了更新也只用更新数值即可，
+				//  重复添加降低效率
+				if (!v[y])
+				{
+					q.push(y);
+					v[y] = 1;
+				}
+			}
+		}
+	}
+}
+
+void t()
+{
+	memset(dist, 0x3f, sizeof dist);
+	memset(v, 0, sizeof v);
+	dist[1] = 0;
+	v[1] = 1;
+	q.push(1);
+	while (!q.empty())
+	{
+		ll x = q.front();
+		q.pop();
+		v[x] = 0;
+		for (ll i = h[x]; i != -1; i = ne[i])
+		{
+			ll y = ne[i], z = w[i];
+			if (dist[y] > dist[x] + z)
+			{
+				dist[y] = dist[x] + z;
 				if (!v[y])
 				{
 					q.push(y);

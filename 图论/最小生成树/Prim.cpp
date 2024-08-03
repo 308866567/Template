@@ -24,9 +24,9 @@ ll prim()//返回最小生成树的边权和
 			if(!st[j]&&(t==-1||dist[t]>dist[j]))
 				t=j;
 		}
-		if(i&&dist[t]==INF) //找不到可以联通的节点
+		if(i>0&&dist[t]==INF) //找不到可以联通的节点
 			return INF;
-		if(i)//i>0时 
+		if(i>0)//i>0时 
 			res+=dist[t];
 		st[t]=1;
 		for(int j=1;j<=n;j++)//i=0时,将连通t附近的节点
