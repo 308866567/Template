@@ -40,6 +40,7 @@ struct SegTree {
   void build(int u, int l, int r) {
     tr[u] = {l, r};
     if (l == r) {
+      // int lc, rc, ls, rs, len, ans;
       tr[u].info = {a[l], a[l], 1, 1, 1, a[l] == 0};
       return;
     }
@@ -48,9 +49,10 @@ struct SegTree {
     build(u << 1 | 1, mid + 1, r);
     pull(u);
   }
-  
+  //单点修改
   void modify(int u, int x) {
     if (tr[u].l == tr[u].r) {
+      //
       tr[u].info.lc ^= 1;
       tr[u].info.rc ^= 1;
       tr[u].info.ans ^= 1;

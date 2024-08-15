@@ -8,22 +8,36 @@ const ll N = 1e6 + 10;
 #define INF 0x3f3f3f3f
 const ll mod = 1e9 + 7;
 ll n;
+
 class segmentTree
 {
+    struct Info
+    {
+        int lc, rc, ls, rs, len, ans;
+    };
+    friend Info operator+(Info a, Info b)
+    {
+        //用子节点更新父节点
+        Info c = {0, 0, 0, 0, 0};
+        return c;
+    }
     const static ll N = 1e6 + 10;
     struct node
     {
         ll l, r;
-        ll sum, add;
+        ll sum,add;
+        Info info;
     } tr[4 * N];
     inline ll lc(ll p) { return p << 1; }
     inline ll rc(ll p) { return p << 1 | 1; }
     inline void push_up(ll p)
     {
-        tr[p].sum = tr[lc(p)].sum + tr[rc(p)].sum;
+        //子节点更新父节点
+        tr[p].info = tr[lc(p)].info + tr[rc(p)].info;
     }
     inline void push_down(ll p)
     {
+        //父节点更新子节点
         if (tr[p].add > 0)
         {
             tr[lc(p)].add = tr[p].add;
@@ -70,6 +84,7 @@ class segmentTree
         }
         ll m = tr[p].l + tr[p].r >> 1;
         push_down(p);
+      
         ll sum = 0;
         if (x <= m)
             sum += query(lc(p), x, y);
